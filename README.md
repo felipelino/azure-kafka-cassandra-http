@@ -68,6 +68,10 @@ How to prepare the load test tool
 7. Replace the variables `URL_TO_YOUR_FUNCTION` and `HOST`
 8. Adjust other parameters as you wish
 
+## Pre-requisites
+
+* Java [JRE 1.8](https://www.oracle.com/java/technologies/javase-jre8-downloads.html) or superior
+
 # Call HTTP Function
 
 ```
@@ -78,3 +82,11 @@ Monitoring you can check:
 * if the HTTP Function was triggered
 * if the Kafka Function was triggered
 * if the cassandra receive the expected data
+
+# Run Load Tests
+
+1. Go to the folder `$GATLING_HOME`
+2. Execute: `./bin/gatling.bat` or `./bin/gatling.sh`
+3. Select the desired test:
+   * `HttpTriggerToKafka`: POST several JSONs to HTTP Function and this function will publish the message to Kafka Topic
+   * `PublishToKafka`: This test, publish several messages direct into Kafka Topic
