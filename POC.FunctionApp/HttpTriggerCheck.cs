@@ -14,10 +14,12 @@ namespace FunctionApp
     using System.Threading;
     using Confluent.Kafka;
     using FunctionApp.Dtos;
+    using FunctionApp.Kafka;
+    using FunctionApp.Repository;
+    using Microsoft.Extensions.Configuration;
 
     public static class HttpTriggerCheck
     {
-        static ProducerConfig _config = new ProducerConfig { BootstrapServers = IConstants.Broker };
         private static IProducer<int, string> _producer = null;
         
         [FunctionName("HttpTriggerCheck")]
@@ -27,7 +29,16 @@ namespace FunctionApp
         { 
             if (_producer == null)
             {
-                  _producer = new ProducerBuilder<int, string>(_config)
+                var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+                var kafkaSettings = new KafkaSettings(configuration);
+                var producerConfig = new ProducerConfig
+                {
+                    BootstrapServers = kafkaSettings.Broker,
+                };
+                _producer = new ProducerBuilder<int, string>(producerConfig)
                     .Build();
             }
             
