@@ -90,3 +90,28 @@ Monitoring you can check:
 3. Select the desired test:
    * `HttpTriggerToKafka`: POST several JSONs to HTTP Function and this function will publish the message to Kafka Topic
    * `PublishToKafka`: This test, publish several messages direct into Kafka Topic
+
+# Build / Publish to Azure Command-Line
+
+## Build Local
+
+The script below build and create a file `publish.zip` with the bundle to delivery to Portal Azure.
+
+```
+./build.ps1
+```
+
+## Run Azure CLI Docker
+
+Execute `pwd` to get `FULL_PATH`
+
+```
+ docker run -v FULL_PATH:/function -it mcr.microsoft.com/azure-cli
+```
+
+Inside the container
+```
+cd /function
+az login
+./deploy-azure.sh
+```
