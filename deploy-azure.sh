@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # Azure Settings
 RESOURCE_GROUP="funcResourceGroup01"
 LOCATION="westeurope"
@@ -12,6 +11,7 @@ CASSANDRA_HOST="host"
 CASSANDRA_PORT="9042"
 CASSANDRA_USER="cassandra"
 CASSANDRA_PASSWORD="password"
+CASSANDRA_KEYSPACE="app"
 KAFKA_BROKER="host:9092"
 KAFKA_TOPIC="person"
 KAFKA_CONSUMER_GROUP="consumer01"
