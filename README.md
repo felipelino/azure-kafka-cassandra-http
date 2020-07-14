@@ -103,6 +103,25 @@ The script below build and create a file `publish.zip` with the bundle to delive
 
 ## Run Azure CLI Docker
 
+Before make the changes of the variables in the script deploy-azure.sh
+```
+# Azure Settings
+RESOURCE_GROUP="funcResourceGroup01"
+LOCATION="westeurope"
+APP_INSIGHTS_NAME="funcAppInsights01"
+STORAGE_ACCOUNT="funcStorage"
+FUNCTION_APP_NAME="funcsDemo01"
+
+# Function Settings
+CASSANDRA_HOST="host"
+CASSANDRA_PORT="9042"
+CASSANDRA_USER="cassandra"
+CASSANDRA_PASSWORD="password"
+KAFKA_BROKER="host:9092"
+KAFKA_TOPIC="person"
+KAFKA_CONSUMER_GROUP="consumer01"
+```
+
 Execute `pwd` to get `FULL_PATH`
 
 ```

@@ -1,10 +1,20 @@
 #!/bin/sh
 
+# Azure Settings
 RESOURCE_GROUP="funcResourceGroup01"
 LOCATION="westeurope"
 APP_INSIGHTS_NAME="funcAppInsights01"
 STORAGE_ACCOUNT="funcStorage"
 FUNCTION_APP_NAME="funcsDemo01"
+
+# Function Settings
+CASSANDRA_HOST="host"
+CASSANDRA_PORT="9042"
+CASSANDRA_USER="cassandra"
+CASSANDRA_PASSWORD="password"
+KAFKA_BROKER="host:9092"
+KAFKA_TOPIC="person"
+KAFKA_CONSUMER_GROUP="consumer01"
 
 resourceGroupExists=`az group exists -n $RESOURCE_GROUP`
 echo "resource group [$RESOURCE_GROUP] already exists? [$resourceGroupExists]"
@@ -50,4 +60,4 @@ echo "Deploying Function App with package"
 az functionapp deployment source config-zip -g $RESOURCE_GROUP -n $FUNCTION_APP_NAME --src /function/publish.zip
 
 echo "Configuring appsettings"
-az functionapp config appsettings set -n $FUNCTION_APP_NAME -g $RESOURCE_GROUP --settings "CASSANDRA_HOST=CASSANDRAHOST.northeurope.cloudapp.azure.com" "CASSANDRA_PORT=9042" "CASSANDRA_USER=cassandra" "CASSANDRA_PASSWD=password" "CASSANDRA_KEYSPACE=app" "KAFKA_BROKER=KAFKAHOST.northeurope.cloudapp.azure.com:9092" "KAFKA_TOPIC=person" "KAFKA_CONSUMER_GROUP=functionGroup01"
+az functionapp config appsettings set -n $FUNCTION_APP_NAME -g $RESOURCE_GROUP --settings "CASSANDRA_HOST=$CASSANDRA_HOST" "CASSANDRA_PORT=$CASSANDRA_PORT" "CASSANDRA_USER=$CASSANDRA_USER" "CASSANDRA_PASSWD=$CASSANDRA_PASSWD" "CASSANDRA_KEYSPACE=$CASSANDRA_KEYSPACE" "KAFKA_BROKER=$KAFKA_BROKER" "KAFKA_TOPIC=$KAFKA_TOPIC" "KAFKA_CONSUMER_GROUP=$KAFKA_CONSUMER_GROUP"
