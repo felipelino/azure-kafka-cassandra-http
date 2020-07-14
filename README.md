@@ -106,7 +106,7 @@ The script below build and create a file `publish.zip` with the bundle to delive
 Execute `pwd` to get `FULL_PATH`
 
 ```
- docker run -v FULL_PATH:/function -it mcr.microsoft.com/azure-cli
+docker run -v FULL_PATH:/function -it mcr.microsoft.com/azure-cli
 ```
 
 Inside the container
