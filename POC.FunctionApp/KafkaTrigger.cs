@@ -17,7 +17,13 @@
 
         [FunctionName("KafkaTriggerCheck")]
         public static void StringTopic(
-            [KafkaTrigger(brokerList: IConstants.Broker, topic: IConstants.Topic, ConsumerGroup = IConstants.ConsumerGroup)] KafkaEventData<string>[] kafkaEvents,
+            [KafkaTrigger("KAFKA_BROKER", IConstants.Topic, 
+                ConsumerGroup = IConstants.ConsumerGroup,
+                Protocol = BrokerProtocol.SaslPlaintext,
+                AuthenticationMode = BrokerAuthenticationMode.Plain,
+                Username = "KAFKA_USER",
+                Password = "KAFKA_PASSWORD"
+                )] KafkaEventData<string>[] kafkaEvents,
             ILogger logger)
         {
             if (_personRepository == null)

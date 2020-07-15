@@ -21,6 +21,8 @@ namespace FunctionApp
     public static class HttpTriggerCheck
     {
         private static IProducer<int, string> _producer = null;
+        private static KafkaSettings _kafkaSettings = null;
+        private static int TimeoutInSeconds = 60;
         
         [FunctionName("HttpTriggerCheck")]
         public static async Task<IActionResult> RunAsync(
@@ -33,11 +35,22 @@ namespace FunctionApp
                     .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                     .AddEnvironmentVariables()
                     .Build();
-                var kafkaSettings = new KafkaSettings(configuration);
-                var producerConfig = new ProducerConfig
-                {
-                    BootstrapServers = kafkaSettings.Broker,
-                };
+                TimeoutInSeconds = configuration.GetValue<int>("TIMEOUT_SECONDS", 60);
+                _kafkaSettings = new KafkaSettings(configuration);
+                var producerConfig = _kafkaSettings.SSlEnabled
+                    ? new ProducerConfig
+                    {
+                        BootstrapServers = _kafkaSettings.Broker,
+                        SaslMechanism = SaslMechanism.Plain,
+                        SaslUsername = _kafkaSettings.Username,
+                        SaslPassword = _kafkaSettings.Password,
+                        SecurityProtocol = SecurityProtocol.SaslPlaintext,
+                    }
+                    : new ProducerConfig
+                    {
+                        BootstrapServers = _kafkaSettings.Broker,
+                    };
+                
                 _producer = new ProducerBuilder<int, string>(producerConfig)
                     .Build();
             }
@@ -52,7 +65,7 @@ namespace FunctionApp
                     string json = JsonConvert.SerializeObject(data);
                     var task = _producer.ProduceAsync(
                         IConstants.Topic, new Message<int, string> { Key = data.Id, Value = json });
-                    var timeout = 60000;
+                    var timeout = TimeoutInSeconds * 1000;
                     if (await Task.WhenAny(task, Task.Delay(timeout, new CancellationToken())) == task)
                     {
                         // Task completed within timeout.
@@ -64,7 +77,7 @@ namespace FunctionApp
                     else
                     {
                         // timeout/cancellation logic
-                        result = $"Timeout when trying to publish message data:[{data}] to kafka";
+                        result = $"Timeout when trying to publish message data:[{data}] to kafka. SSL Enabled?:[{_kafkaSettings.SSlEnabled}]";
                     }
                 }
                 catch (Exception e)

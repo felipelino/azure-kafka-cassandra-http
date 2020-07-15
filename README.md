@@ -113,6 +113,7 @@ STORAGE_ACCOUNT="funcStorage"
 FUNCTION_APP_NAME="funcsDemo01"
 
 # Function Settings
+TIMEOUT_SECONDS="10"
 CASSANDRA_HOST="host"
 CASSANDRA_PORT="9042"
 CASSANDRA_USER="cassandra"
@@ -121,6 +122,9 @@ CASSANDRA_KEYSPACE="app"
 KAFKA_BROKER="host:9092"
 KAFKA_TOPIC="person"
 KAFKA_CONSUMER_GROUP="consumer01"
+KAFKA_SSL_ENABLED="true"
+KAFKA_USER="user"
+KAFKA_PASSWORD="passwd"
 ```
 
 Execute `pwd` to get `FULL_PATH`
