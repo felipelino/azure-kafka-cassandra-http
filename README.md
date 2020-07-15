@@ -26,6 +26,11 @@ Search for tutorials to install or run the Kafka and Cassandra.
 * Open the used ports
 * **DON'T DO IT** in a production environment
 
+Kafka can work with authentication SSL Plaintext or without authentication. We have Two functions listen to Kafka, one to work with authorization an another one without it.
+The HTTP function will publish to Kafka broker with authentication if it is enable.
+
+You can see the available configurations in the file `local.settings.json`
+
 ### Cassandra Model
 
 ```
@@ -120,6 +125,7 @@ CASSANDRA_USER="cassandra"
 CASSANDRA_PASSWD="password"
 CASSANDRA_KEYSPACE="app"
 KAFKA_BROKER="host:9092"
+KAFKA_BROKER_AUTH="host_auth:9092"
 KAFKA_TOPIC="person"
 KAFKA_CONSUMER_GROUP="consumer01"
 KAFKA_SSL_ENABLED="true"
@@ -130,7 +136,7 @@ KAFKA_PASSWORD="passwd"
 Execute `pwd` to get `FULL_PATH`
 
 ```
-docker run -v FULL_PATH:/function -it mcr.microsoft.com/azure-cli
+docker run -v FULL_PATH:/function --name azure-cli -it mcr.microsoft.com/azure-cli
 ```
 
 Inside the container

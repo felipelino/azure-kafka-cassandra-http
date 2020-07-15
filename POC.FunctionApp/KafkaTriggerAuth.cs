@@ -9,14 +9,18 @@
     using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
 
-    public static class KafkaTrigger
+    public static class KafkaTriggerAuth
     {
         private static PersonRepository _personRepository;
 
-        [FunctionName("KafkaTrigger")]
+        [FunctionName("KafkaTriggerWithAuth")]
         public static void StringTopic(
-            [KafkaTrigger("KAFKA_BROKER", IConstants.Topic, 
-                ConsumerGroup = IConstants.ConsumerGroup
+            [KafkaTrigger("KAFKA_BROKER_AUTH", IConstants.Topic, 
+                ConsumerGroup = IConstants.ConsumerGroup,
+                Protocol = BrokerProtocol.SaslPlaintext,
+                AuthenticationMode = BrokerAuthenticationMode.Plain,
+                Username = "KAFKA_USER",
+                Password = "KAFKA_PASSWORD"
                 )] KafkaEventData<string>[] kafkaEvents,
             ILogger logger)
         {

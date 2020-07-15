@@ -22,9 +22,9 @@ namespace FunctionApp
     {
         private static IProducer<int, string> _producer = null;
         private static KafkaSettings _kafkaSettings = null;
-        private static int TimeoutInSeconds = 60;
+        private static int _timeoutInSeconds = 60;
         
-        [FunctionName("HttpTriggerCheck")]
+        [FunctionName("HttpTrigger")]
         public static async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous,   "get","post", Route = null)]
             HttpRequest req, ILogger log)
@@ -35,7 +35,7 @@ namespace FunctionApp
                     .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                     .AddEnvironmentVariables()
                     .Build();
-                TimeoutInSeconds = configuration.GetValue<int>("TIMEOUT_SECONDS", 60);
+                _timeoutInSeconds = configuration.GetValue<int>("TIMEOUT_SECONDS", 60);
                 _kafkaSettings = new KafkaSettings(configuration);
                 var producerConfig = _kafkaSettings.SSlEnabled
                     ? new ProducerConfig
@@ -65,7 +65,7 @@ namespace FunctionApp
                     string json = JsonConvert.SerializeObject(data);
                     var task = _producer.ProduceAsync(
                         IConstants.Topic, new Message<int, string> { Key = data.Id, Value = json });
-                    var timeout = TimeoutInSeconds * 1000;
+                    var timeout = _timeoutInSeconds * 1000;
                     if (await Task.WhenAny(task, Task.Delay(timeout, new CancellationToken())) == task)
                     {
                         // Task completed within timeout.
